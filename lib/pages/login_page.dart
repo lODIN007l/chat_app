@@ -1,17 +1,24 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:aoo_chat_live/helpers/mostrar_alerta.dart';
+import 'package:aoo_chat_live/services/auth_service.dart';
 import 'package:aoo_chat_live/widgets/custom_buttton.dart';
 import 'package:aoo_chat_live/widgets/custom_input.dart';
 import 'package:aoo_chat_live/widgets/label.dart';
 import 'package:aoo_chat_live/widgets/logo_app.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+// ignore: use_key_in_widget_constructors
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xffF2F2F2),
+        backgroundColor: const Color(0xffF2F2F2),
         body: SafeArea(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
+            // ignore: sized_box_for_whitespace
             child: Container(
               height: MediaQuery.of(context).size.height * 0.9,
               child: Column(
@@ -50,6 +57,9 @@ class __FormStateState extends State<_FormState> {
 
   @override
   Widget build(BuildContext context) {
+    final authServicio =
+        Provider.of<AutenticacionService>(context, listen: false);
+
     return Container(
       margin: const EdgeInsets.only(
         top: 40,
@@ -71,10 +81,23 @@ class __FormStateState extends State<_FormState> {
           ),
           CustomButton(
             text1: 'Ingrese',
-            onpress1: () {
-              print(emailControlador.text);
-              print(passwordControlador.text);
-            },
+            onpress1: authServicio.autenticando
+                // ignore: avoid_returning_null_for_void
+                ? () => {}
+                : () async {
+                    FocusScope.of(context).unfocus();
+                    final loginOK = await authServicio.login(
+                      emailControlador.text.trim(),
+                      passwordControlador.text.trim(),
+                    );
+                    if (loginOK) {
+                      Navigator.pushReplacementNamed(context, 'usuarios');
+                    } else {
+                      //Mostrar alerta
+                      mostrarAlerta(context, 'Error',
+                          'Revise los datos ingresados', Colors.blue);
+                    }
+                  },
           ),
         ],
       ),

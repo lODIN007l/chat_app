@@ -13,7 +13,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final _textCtrl = TextEditingController();
   final _focusNode = FocusNode();
 
-  List<ChatMessage> _mensaje = [];
+  final List<ChatMessage> _mensaje = [];
 
   bool estaescribiendo = false;
 

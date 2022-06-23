@@ -8,23 +8,21 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: onpress1,
-      elevation: 2,
-      highlightElevation: 5,
-      color: Colors.blue,
-      shape: const StadiumBorder(),
-      child: SizedBox(
+    return ElevatedButton(
+      style: ButtonStyle(
+          elevation: MaterialStateProperty.all(2),
+          shape: MaterialStateProperty.all(StadiumBorder())),
+      // elevation: 2,
+      // highlightElevation: 5,
+      // color: Colors.blue,
+      // shape: StadiumBorder(),
+      onPressed: () => this.onpress1(),
+      child: Container(
         width: double.infinity,
         height: 55,
         child: Center(
-          child: Text(
-            text1,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-            ),
-          ),
+          child: Text(this.text1,
+              style: TextStyle(color: Colors.white, fontSize: 17)),
         ),
       ),
     );

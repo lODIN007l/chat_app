@@ -1,8 +1,12 @@
+import 'package:aoo_chat_live/helpers/mostrar_alerta.dart';
 import 'package:aoo_chat_live/widgets/custom_buttton.dart';
 import 'package:aoo_chat_live/widgets/custom_input.dart';
 import 'package:aoo_chat_live/widgets/label.dart';
 import 'package:aoo_chat_live/widgets/logo_app.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../services/auth_service.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -47,9 +51,13 @@ class _FormState extends StatefulWidget {
 class __FormStateState extends State<_FormState> {
   final emailControlador = TextEditingController();
   final passwordControlador = TextEditingController();
+  final nombreControlador = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final authServicio =
+        Provider.of<AutenticacionService>(context, listen: false);
+
     return Container(
       margin: const EdgeInsets.only(
         top: 40,
@@ -57,6 +65,12 @@ class __FormStateState extends State<_FormState> {
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
+          CustomInput(
+            ico: Icons.person,
+            placeholder: 'Nombre',
+            keybTipo: TextInputType.emailAddress,
+            textcontrolador: nombreControlador,
+          ),
           CustomInput(
             ico: Icons.mail_outline,
             placeholder: 'Correo',
@@ -71,10 +85,24 @@ class __FormStateState extends State<_FormState> {
           ),
           CustomButton(
             text1: 'Ingrese',
-            onpress1: () {
-              print(emailControlador.text);
-              print(passwordControlador.text);
-            },
+            onpress1: authServicio.autenticando
+                ? () => {}
+                : () async {
+                    FocusScope.of(context).unfocus();
+                    final registroOK = await authServicio.register(
+                      nombreControlador.text.trim(),
+                      emailControlador.text.trim(),
+                      passwordControlador.text.trim(),
+                    );
+                    if (registroOK == true) {
+                      mostrarAlerta(context, 'Registrado Correctamente',
+                          'Bienvenido', Colors.green);
+                      Navigator.pushReplacementNamed(context, 'usuarios');
+                    } else {
+                      //Mostrar alerta
+                      mostrarAlerta(context, 'Error', registroOK, Colors.red);
+                    }
+                  },
           ),
         ],
       ),
