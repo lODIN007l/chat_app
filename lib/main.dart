@@ -1,5 +1,7 @@
 import 'package:aoo_chat_live/routes/routes.dart';
 import 'package:aoo_chat_live/services/auth_service.dart';
+import 'package:aoo_chat_live/services/chat_service.dart';
+import 'package:aoo_chat_live/services/sockt_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +13,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AutenticacionService()),
+        ChangeNotifierProvider(create: (_) => SocketService()),
+        ChangeNotifierProvider(create: (_) => ChatServicio()),
       ],
       child: MaterialApp(
         title: 'Chat App',

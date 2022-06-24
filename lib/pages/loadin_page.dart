@@ -6,6 +6,8 @@ import 'package:aoo_chat_live/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../services/sockt_service.dart';
+
 class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,8 +26,11 @@ class LoadingScreen extends StatelessWidget {
   Future checkLoginState(BuildContext context) async {
     final authServicio =
         Provider.of<AutenticacionService>(context, listen: false);
+    final socketServicio = Provider.of<SocketService>(context, listen: false);
     final autenticadoK = await authServicio.isLogguedin();
     if (autenticadoK) {
+      //conectar a socket service
+      socketServicio.connect();
       //Navigator.pushReplacementNamed(context, 'usuarios');
       Navigator.pushReplacement(
         context,

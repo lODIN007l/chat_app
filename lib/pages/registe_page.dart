@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth_service.dart';
+import '../services/sockt_service.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -58,6 +59,8 @@ class __FormStateState extends State<_FormState> {
     final authServicio =
         Provider.of<AutenticacionService>(context, listen: false);
 
+    final socketServicio = Provider.of<SocketService>(context, listen: false);
+
     return Container(
       margin: const EdgeInsets.only(
         top: 40,
@@ -95,6 +98,7 @@ class __FormStateState extends State<_FormState> {
                       passwordControlador.text.trim(),
                     );
                     if (registroOK == true) {
+                      socketServicio.connect();
                       mostrarAlerta(context, 'Registrado Correctamente',
                           'Bienvenido', Colors.green);
                       Navigator.pushReplacementNamed(context, 'usuarios');

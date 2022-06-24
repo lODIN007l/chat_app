@@ -1,21 +1,40 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:aoo_chat_live/models/usuario.dart';
 import 'package:aoo_chat_live/services/auth_service.dart';
+import 'package:aoo_chat_live/services/chat_service.dart';
+import 'package:aoo_chat_live/services/usuarios_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class UsuariosScreen extends StatelessWidget {
-  RefreshController _refreshController =
+import '../services/sockt_service.dart';
+
+class UsuariosScreen extends StatefulWidget {
+  @override
+  State<UsuariosScreen> createState() => _UsuariosScreenState();
+}
+
+class _UsuariosScreenState extends State<UsuariosScreen> {
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  final usuarios = [
-    Usuario(online: true, email: 'test1@gmail.com', nombre: 'Maria', uid: '1'),
-    Usuario(online: false, email: 'test2@gmail.com', nombre: 'Odin', uid: '3'),
-    Usuario(online: true, email: 'test3@gmail.com', nombre: 'Pepe', uid: '2'),
-  ];
+  final usuarioServ = UsuarioServicio();
+
+  List<Usuario> usuarios = [];
+
+  // final usuarios = [
+
+  @override
+  void initState() {
+    _cargandoUsuario();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authServicio = Provider.of<AutenticacionService>(context);
+    final socketServicio = Provider.of<SocketService>(context);
     final usuario = authServicio.usuario;
     return Scaffold(
       appBar: AppBar(
@@ -30,6 +49,7 @@ class UsuariosScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
+            socketServicio.desconectar();
             AutenticacionService.deleteToken();
             Navigator.pushReplacementNamed(context, 'login');
           },
@@ -41,21 +61,17 @@ class UsuariosScreen extends StatelessWidget {
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 10),
-            child: Icon(
-              Icons.check_circle,
-              color: Colors.blue[400],
-            ),
-          )
+            child: (socketServicio.serverStatusG == ServerStatus.Online)
+                ? Icon(Icons.check_circle, color: Colors.blue[400])
+                : Icon(Icons.offline_bolt, color: Colors.red),
+          ),
         ],
       ),
       body: SmartRefresher(
         controller: _refreshController,
         onRefresh: _cargandoUsuario,
-        header: WaterDropHeader(
-          complete: Icon(
-            Icons.check_circle,
-            color: Colors.blue[200],
-          ),
+        header: const WaterDropMaterialHeader(
+          color: Colors.blue,
         ),
         enablePullDown: true,
         child: _ListVIEWuSUARIOS(),
@@ -88,13 +104,20 @@ class UsuariosScreen extends StatelessWidget {
             color: usuario.online ? Colors.green : Colors.red,
             borderRadius: BorderRadius.circular(100)),
       ),
+      onTap: () {
+        final chatSer = Provider.of<ChatServicio>(context, listen: false);
+        chatSer.usuarioDestino = usuario;
+        Navigator.pushNamed(context, 'chat');
+      },
     );
   }
 
-  void _cargandoUsuario() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
+  _cargandoUsuario() async {
+    usuarioServ.getUsuario();
+    usuarios = await usuarioServ.getUsuario();
+
+    setState(() {});
+    // if failed,use refreshFailed()'
     _refreshController.refreshCompleted();
   }
 }

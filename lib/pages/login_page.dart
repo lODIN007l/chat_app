@@ -2,6 +2,7 @@
 
 import 'package:aoo_chat_live/helpers/mostrar_alerta.dart';
 import 'package:aoo_chat_live/services/auth_service.dart';
+import 'package:aoo_chat_live/services/sockt_service.dart';
 import 'package:aoo_chat_live/widgets/custom_buttton.dart';
 import 'package:aoo_chat_live/widgets/custom_input.dart';
 import 'package:aoo_chat_live/widgets/label.dart';
@@ -60,6 +61,8 @@ class __FormStateState extends State<_FormState> {
     final authServicio =
         Provider.of<AutenticacionService>(context, listen: false);
 
+    final socketServicio = Provider.of<SocketService>(context, listen: false);
+
     return Container(
       margin: const EdgeInsets.only(
         top: 40,
@@ -91,6 +94,9 @@ class __FormStateState extends State<_FormState> {
                       passwordControlador.text.trim(),
                     );
                     if (loginOK) {
+                      //conectar a socket service
+                      socketServicio.connect();
+                      //navegamso
                       Navigator.pushReplacementNamed(context, 'usuarios');
                     } else {
                       //Mostrar alerta
