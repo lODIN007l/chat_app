@@ -13,11 +13,11 @@ class LogoApp extends StatelessWidget {
         child: Column(
           children: [
             const Image(
-              image: AssetImage('assets/tag-logo.png'),
+              image: AssetImage('assets/tag1-logo.png'),
             ),
             Text(
               titulo1,
-              style: const TextStyle(fontSize: 30),
+              style: const TextStyle(fontSize: 20),
             )
           ],
         ),

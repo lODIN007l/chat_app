@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const LogoApp(titulo1: 'Messenger'),
+                  const LogoApp(titulo1: 'ODINFORCE'),
                   _FormState(),
                   const LabelWidget(
                     text1: 'No tienes cuenta?',

@@ -60,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   void _escucharmensaje(dynamic payload) {
+    print('tengo mensaje $payload');
     ChatMessage message = ChatMessage(
       textoCh: payload['mensaje'],
       uid: payload['para'],

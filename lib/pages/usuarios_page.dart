@@ -107,6 +107,8 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
       onTap: () {
         final chatSer = Provider.of<ChatServicio>(context, listen: false);
         chatSer.usuarioDestino = usuario;
+        //print('id del nuevo');
+        //print(usuario.uid);
         Navigator.pushNamed(context, 'chat');
       },
     );

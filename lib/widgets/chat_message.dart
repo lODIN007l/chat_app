@@ -18,7 +18,8 @@ class ChatMessage extends StatelessWidget {
       child: SizeTransition(
         sizeFactor: CurvedAnimation(parent: animacion, curve: Curves.easeOut),
         child: Container(
-          child: uid == authSer.usuario!.uid ? _myMessage() : _notMyMessage(),
+          child:
+              this.uid != authSer.usuario!.uid ? _myMessage() : _notMyMessage(),
         ),
       ),
     );
