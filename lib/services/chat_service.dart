@@ -13,6 +13,7 @@ class ChatServicio with ChangeNotifier {
     final uri = Uri.parse(
       '${Enviroment.apiUrl}/mensajes/$usuarioID',
     );
+    print(uri);
     final resp = await http.get(uri, headers: {
       'content-Type': 'application/json',
       'x-token': await AutenticacionService.getToken()

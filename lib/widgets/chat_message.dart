@@ -13,13 +13,13 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authSer = Provider.of<AutenticacionService>(context, listen: false);
+
     return FadeTransition(
       opacity: animacion,
       child: SizeTransition(
         sizeFactor: CurvedAnimation(parent: animacion, curve: Curves.easeOut),
         child: Container(
-          child:
-              this.uid != authSer.usuario!.uid ? _myMessage() : _notMyMessage(),
+          child: uid != authSer.usuario!.uid ? _notMyMessage() : _myMessage(),
         ),
       ),
     );

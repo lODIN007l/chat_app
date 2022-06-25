@@ -47,7 +47,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     final historial = chat!.map(
       (mess) => ChatMessage(
         textoCh: mess.mensaje,
-        uid: mess.emisor,
+        uid: mess.para,
         animacion: AnimationController(
           vsync: this,
           duration: const Duration(microseconds: 0),
@@ -60,10 +60,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   void _escucharmensaje(dynamic payload) {
-    print('tengo mensaje $payload');
+    //print('tengo mensaje $payload');
     ChatMessage message = ChatMessage(
       textoCh: payload['mensaje'],
-      uid: payload['para'],
+      uid: payload['emisor'],
       animacion: AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 300),
@@ -92,30 +92,32 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               color: Colors.black54,
             ),
           ),
-          title: Column(
-            textDirection: TextDirection.ltr,
-            children: [
-              Center(
-                child: CircleAvatar(
-                  maxRadius: 19,
+          title: Container(
+            margin:
+                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.30),
+            child: Column(
+              textDirection: TextDirection.ltr,
+              children: [
+                CircleAvatar(
+                  maxRadius: 15,
                   backgroundColor: const Color.fromARGB(255, 20, 76, 122),
                   child: Text(
                     usuarioDes!.nombre.substring(0, 2),
                     style: const TextStyle(fontSize: 15),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 3,
-              ),
-              Text(
-                usuarioDes.nombre,
-                style: const TextStyle(
-                  color: Colors.black87,
-                  fontSize: 14,
+                const SizedBox(
+                  height: 3,
                 ),
-              )
-            ],
+                Text(
+                  usuarioDes.nombre,
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
         body: Container(
